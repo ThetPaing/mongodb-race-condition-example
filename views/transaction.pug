@@ -1,0 +1,65 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+
+  button#myModifyTest Test Run Modify
+
+  button#myTransactionTest Test Run Transaction
+
+  div#loadingIndicator(style="display:none;") Loading...
+
+  table
+    tr
+      td Click Count:
+      td#clickCount #{clickCount}
+
+  script.
+    document.getElementById('myModifyTest').addEventListener('click', function() {
+      document.getElementById('loadingIndicator').style.display = 'block';
+
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/transaction/handleShModifyClick', true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4) {
+
+          document.getElementById('loadingIndicator').style.display = 'none';
+
+          if (xhr.status == 200) {
+
+            var response = JSON.parse(xhr.responseText);
+            document.getElementById('clickCount').innerText = response.clickCount;
+          } else {
+
+            console.error('Error:', xhr.status, xhr.statusText);
+          }
+        }
+      };
+      xhr.send();
+    });
+
+    document.getElementById('myTransactionTest').addEventListener('click', function() {
+      document.getElementById('loadingIndicator').style.display = 'block';
+
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/transaction/handleShClick', true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4) {
+
+          document.getElementById('loadingIndicator').style.display = 'none';
+
+          if (xhr.status == 200) {
+
+            var response = JSON.parse(xhr.responseText);
+            document.getElementById('clickCount').innerText = response.clickCount;
+          } else {
+
+            console.error('Error:', xhr.status, xhr.statusText);
+          }
+        }
+      };
+      xhr.send();
+    });
